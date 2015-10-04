@@ -1,6 +1,7 @@
 package com.akhadidja.android.flashnews;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +25,14 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryHolder>
     private static final String LOG_TAG = StoryAdapter.class.getSimpleName();
     private Story [] mStories;
 
-    public StoryAdapter(Story[] stories) {
+    public StoryAdapter() {
+        mStories = new Story[0];
+    }
+
+    public void setStories(Story[] stories) {
         mStories = stories;
+        notifyDataSetChanged();
+        Log.d(LOG_TAG, "New set of stories");
     }
 
     @Override

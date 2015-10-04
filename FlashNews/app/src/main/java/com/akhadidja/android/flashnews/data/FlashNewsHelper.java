@@ -18,7 +18,8 @@ public class FlashNewsHelper extends SQLiteOpenHelper {
                     FlashNewsContract.StoryEntry.COLUMN_TITLE + " TEXT," +
                     FlashNewsContract.StoryEntry.COLUMN_TEASER + " TEXT," +
                     FlashNewsContract.StoryEntry.COLUMN_DATE + " TEXT," +
-                    FlashNewsContract.StoryEntry.COLUMN_TEXT_WITH_HTML + " TEXT);";
+                    FlashNewsContract.StoryEntry.COLUMN_TEXT_WITH_HTML + " TEXT," +
+                    FlashNewsContract.StoryEntry.COLUMN_STORY_TOPIC + " TEXT);";
     private static final String SQL_DELETE_STORIES =
             "DROP TABLE IF EXISTS " + FlashNewsContract.StoryEntry.TABLE_NAME;
 

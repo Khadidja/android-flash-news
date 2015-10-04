@@ -1,9 +1,11 @@
 package com.akhadidja.android.flashnews;
 
+import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.akhadidja.android.flashnews.callbacks.StoriesLoadedListener;
+import com.akhadidja.android.flashnews.data.FlashNewsSource;
 import com.akhadidja.android.flashnews.json.NprApiEndpoints;
 import com.akhadidja.android.flashnews.json.StoryDeserializer;
 import com.akhadidja.android.flashnews.json.Utility;
@@ -19,12 +21,17 @@ public class FetchNprNewsTask extends AsyncTask<String, Void, Story[]>{
 
     private static final String LOG_TAG = FetchNprNewsTask.class.getSimpleName();
 
-    private RecyclerView mRecyclerView;
+    private FlashNewsSource dataSource;
     private String mApiKey;
+    private String mTopic;
+    private StoriesLoadedListener mListener;
 
-    public FetchNprNewsTask(String apiKey, RecyclerView recyclerView){
+    public FetchNprNewsTask(Context context, String apiKey, String topic,
+                            StoriesLoadedListener listener){
+        dataSource = new FlashNewsSource(context);
         mApiKey = apiKey;
-        mRecyclerView = recyclerView;
+        mTopic = topic;
+        mListener = listener;
     }
 
     @Override
@@ -50,8 +57,11 @@ public class FetchNprNewsTask extends AsyncTask<String, Void, Story[]>{
     @Override
     protected void onPostExecute(Story[] stories) {
         if(stories != null){
-            StoryAdapter mAdapter = new StoryAdapter(stories);
-            mRecyclerView.setAdapter(mAdapter);
+            Log.d(LOG_TAG, "Downloaded " + stories.length + " for " + mTopic);
+            dataSource.open();
+            dataSource.insertStories(stories, mTopic);
+            mListener.onStoriesLoadedListener(dataSource.getStoriesByTopic(mTopic));
+            dataSource.close();
         }
     }
 }

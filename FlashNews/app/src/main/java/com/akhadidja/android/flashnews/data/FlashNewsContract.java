@@ -15,5 +15,6 @@ public final class FlashNewsContract {
         public static final String COLUMN_TEASER = "teaser";
         public static final String COLUMN_DATE = "date";
         public static final String COLUMN_TEXT_WITH_HTML = "text_with_html";
+        public static final String COLUMN_STORY_TOPIC = "story_topic";
     }
 }

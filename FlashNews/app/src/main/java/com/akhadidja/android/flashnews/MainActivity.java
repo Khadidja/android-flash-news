@@ -14,21 +14,35 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 
+import com.akhadidja.android.flashnews.callbacks.StoriesLoadedListener;
+import com.akhadidja.android.flashnews.data.FlashNewsSource;
 import com.akhadidja.android.flashnews.json.NprApiEndpoints;
+import com.akhadidja.android.flashnews.pojos.Story;
 
 // TODO link back to https://icons8.com & https://www.iconfinder.com in About
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, RecyclerView.OnItemTouchListener {
+        implements NavigationView.OnNavigationItemSelectedListener, RecyclerView.OnItemTouchListener, StoriesLoadedListener {
 
-    private RecyclerView mRecyclerView;
     private String mApiKey;
     private GestureDetectorCompat mDetectorCompat;
+    private StoryAdapter mStoryAdapter;
+    private FlashNewsSource dataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dataSource = new FlashNewsSource(this);
+        dataSource.open();
+
+        initLayoutFeatures();
+
+        initRecycler();
+    }
+
+    private void initLayoutFeatures() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -40,15 +54,28 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.stories_recycler_view);
+    private void initRecycler() {
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.stories_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addOnItemTouchListener(this);
+        mStoryAdapter = new StoryAdapter();
+        mRecyclerView.setAdapter(mStoryAdapter);
         mDetectorCompat = new GestureDetectorCompat(this, new StoryListener(this, mRecyclerView));
         mApiKey = getString(R.string.NPR_API_KEY);
+    }
 
-        FetchNprNewsTask fetchNprNewsTask = new FetchNprNewsTask(mApiKey, mRecyclerView);
-        fetchNprNewsTask.execute(NprApiEndpoints.TOPIC_NEWS);
+    @Override
+    protected void onResume() {
+        dataSource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        dataSource.close();
+        super.onPause();
     }
 
     @Override
@@ -85,42 +112,42 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_news:{
                 setTitle(R.string.news);
                 FetchNprNewsTask newsTask =
-                        new FetchNprNewsTask(mApiKey, mRecyclerView);
+                        new FetchNprNewsTask(this, mApiKey, NprApiEndpoints.TOPIC_NEWS, this);
                 newsTask.execute(NprApiEndpoints.TOPIC_NEWS);
                 break;
             }
             case R.id.nav_sports:{
                 setTitle(R.string.sports);
                 FetchNprNewsTask sportsTask =
-                        new FetchNprNewsTask(mApiKey, mRecyclerView);
+                        new FetchNprNewsTask(this, mApiKey, NprApiEndpoints.TOPIC_SPORTS, this);
                 sportsTask.execute(NprApiEndpoints.TOPIC_SPORTS);
                 break;
             }
             case R.id.nav_science:{
                 setTitle(R.string.science);
                 FetchNprNewsTask scienceTask =
-                        new FetchNprNewsTask(mApiKey, mRecyclerView);
+                        new FetchNprNewsTask(this, mApiKey, NprApiEndpoints.TOPIC_SCIENCE, this);
                 scienceTask.execute(NprApiEndpoints.TOPIC_SCIENCE);
                 break;
             }
             case R.id.nav_tech:{
                 setTitle(R.string.technology);
                 FetchNprNewsTask techTask =
-                        new FetchNprNewsTask(mApiKey, mRecyclerView);
+                        new FetchNprNewsTask(this, mApiKey, NprApiEndpoints.TOPIC_TECH, this);
                 techTask.execute(NprApiEndpoints.TOPIC_TECH);
                 break;
             }
             case R.id.nav_world:{
                 setTitle(R.string.world);
                 FetchNprNewsTask worldTask =
-                        new FetchNprNewsTask(mApiKey, mRecyclerView);
+                        new FetchNprNewsTask(this, mApiKey, NprApiEndpoints.TOPIC_WORLD, this);
                 worldTask.execute(NprApiEndpoints.TOPIC_WORLD);
                 break;
             }
             case R.id.nav_politics:{
                 setTitle(R.string.politics);
                 FetchNprNewsTask politicsTask =
-                        new FetchNprNewsTask(mApiKey, mRecyclerView);
+                        new FetchNprNewsTask(this, mApiKey, NprApiEndpoints.TOPIC_POLITICS, this);
                 politicsTask.execute(NprApiEndpoints.TOPIC_POLITICS);
                 break;
             }
@@ -148,5 +175,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
+    }
+
+    @Override
+    public void onStoriesLoadedListener(Story[] stories) {
+        mStoryAdapter.setStories(stories);
     }
 }
