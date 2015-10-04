@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_news"
+            android:icon="@mipmap/ic_news"
+            android:title="@string/news" />
+        <item
+            android:id="@+id/nav_sports"
+            android:icon="@mipmap/ic_sports"
+            android:title="@string/sports" />
+        <item
+            android:id="@+id/nav_science"
+            android:icon="@mipmap/ic_science"
+            android:title="@string/science" />
+        <item
+            android:id="@+id/nav_tech"
+            android:icon="@mipmap/ic_tech"
+            android:title="@string/technology" />
+    </group>
+
+</menu>
