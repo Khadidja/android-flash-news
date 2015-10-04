@@ -19,7 +19,7 @@ public class Utility {
                 .appendQueryParameter(NprApiEndpoints.TOPIC, topicId)
                 .appendQueryParameter(NprApiEndpoints.FIELDS,
                         NprApiEndpoints.FIELD_TITLE +","+ NprApiEndpoints.FIELD_TEASER+","+
-                        NprApiEndpoints.FIELD_STORY_DATE+","+ NprApiEndpoints.FIELD_TEXT+","+
+                        NprApiEndpoints.FIELD_STORY_DATE+","+ NprApiEndpoints.TEXT_WITH_HTML +","+
                         NprApiEndpoints.FIELD_IMAGE+","+ NprApiEndpoints.FIELD_CORRECTION)
                 .appendQueryParameter(NprApiEndpoints.OUTPUT, NprApiEndpoints.OUTPUT_JSON)
                 .appendQueryParameter(NprApiEndpoints.API_KEY, apiKey)

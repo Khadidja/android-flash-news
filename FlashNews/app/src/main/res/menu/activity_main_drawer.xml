@@ -18,6 +18,16 @@
             android:id="@+id/nav_tech"
             android:icon="@mipmap/ic_tech"
             android:title="@string/technology" />
+
+        <item
+            android:id="@+id/nav_world"
+            android:icon="@mipmap/ic_world"
+            android:title="@string/world" />
+
+        <item
+            android:id="@+id/nav_politics"
+            android:icon="@mipmap/ic_politics"
+            android:title="@string/politics" />
     </group>
 
 </menu>

@@ -110,6 +110,20 @@ public class MainActivity extends AppCompatActivity
                 techTask.execute(NprApiEndpoints.TOPIC_TECH);
                 break;
             }
+            case R.id.nav_world:{
+                setTitle(R.string.world);
+                FetchNprNewsTask worldTask =
+                        new FetchNprNewsTask(mApiKey, mRecyclerView);
+                worldTask.execute(NprApiEndpoints.TOPIC_WORLD);
+                break;
+            }
+            case R.id.nav_politics:{
+                setTitle(R.string.politics);
+                FetchNprNewsTask politicsTask =
+                        new FetchNprNewsTask(mApiKey, mRecyclerView);
+                politicsTask.execute(NprApiEndpoints.TOPIC_POLITICS);
+                break;
+            }
             default:
                 setTitle(R.string.app_name);
                 break;

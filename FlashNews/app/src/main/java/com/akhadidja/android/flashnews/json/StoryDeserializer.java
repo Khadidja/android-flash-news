@@ -9,8 +9,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 public class StoryDeserializer implements JsonDeserializer<Story> {
     @Override
@@ -38,14 +36,14 @@ public class StoryDeserializer implements JsonDeserializer<Story> {
                 htmlLink = linkObject.get("$text").getAsString();
         }
 
-        final JsonArray textArray = storyObject.get("text").getAsJsonObject()
+        final JsonArray textArray = storyObject.get("textWithHtml").getAsJsonObject()
                                                 .get("paragraph").getAsJsonArray();
-        List<String> text = new ArrayList<>();
+        String text = "";
         for (int i = 0; i < textArray.size(); i++) {
             if(textArray.get(i).getAsJsonObject().has("$text"))
-                text.add(textArray.get(i).getAsJsonObject().get("$text").getAsString());
-            else
-                text.add("");
+                text += textArray.get(i).getAsJsonObject().get("$text").getAsString();
+            //else
+                //text += "\n";
         }
 
         final Story story = new Story();
@@ -55,7 +53,7 @@ public class StoryDeserializer implements JsonDeserializer<Story> {
         story.setStoryDate(storyDate);
         story.setTeaser(teaser);
         story.setTitle(title);
-        story.setText(text);
+        story.setTextWithHtml(text);
 
         return story;
     }

@@ -1,9 +1,5 @@
 package com.akhadidja.android.flashnews.pojos;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class Story {
     private String id;
     private String shortLink;
@@ -11,11 +7,9 @@ public class Story {
     private String title;
     private String teaser;
     private String storyDate;
-    private List<String> text;
+    private String textWithHtml;
 
-    public Story() {
-        text = new ArrayList<>();
-    }
+    public Story() {}
 
     public String getId() {
         return id;
@@ -65,12 +59,12 @@ public class Story {
         this.storyDate = storyDate;
     }
 
-    public List<String> getText() {
-        return text;
+    public String getTextWithHtml() {
+        return textWithHtml;
     }
 
-    public void setText(List<String> text) {
-        this.text = text;
+    public void setTextWithHtml(String textWithHtml) {
+        this.textWithHtml = textWithHtml;
     }
 
     @Override
@@ -82,7 +76,7 @@ public class Story {
                 ", title='" + title + '\'' +
                 ", teaser='" + teaser + '\'' +
                 ", storyDate='" + storyDate + '\'' +
-                ", text=" + Arrays.toString(text.toArray()) +
+                ", textWithHtml=" + textWithHtml +
                 '}';
     }
 }
