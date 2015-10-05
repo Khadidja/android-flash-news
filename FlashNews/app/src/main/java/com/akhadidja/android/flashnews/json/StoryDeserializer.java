@@ -36,14 +36,14 @@ public class StoryDeserializer implements JsonDeserializer<Story> {
                 htmlLink = linkObject.get("$text").getAsString();
         }
 
-        final JsonArray textArray = storyObject.get("textWithHtml").getAsJsonObject()
+        final JsonArray textArray = storyObject.get(NprApiEndpoints.FIELD_TEXT).getAsJsonObject()
                                                 .get("paragraph").getAsJsonArray();
         String text = "";
         for (int i = 0; i < textArray.size(); i++) {
-            if(textArray.get(i).getAsJsonObject().has("$text"))
+            if(textArray.get(i).getAsJsonObject().has("$text")){
                 text += textArray.get(i).getAsJsonObject().get("$text").getAsString();
-            //else
-                //text += "\n";
+                text += "\n\n";
+            }
         }
 
         final Story story = new Story();
@@ -53,7 +53,7 @@ public class StoryDeserializer implements JsonDeserializer<Story> {
         story.setStoryDate(storyDate);
         story.setTeaser(teaser);
         story.setTitle(title);
-        story.setTextWithHtml(text);
+        story.setText(text);
 
         return story;
     }

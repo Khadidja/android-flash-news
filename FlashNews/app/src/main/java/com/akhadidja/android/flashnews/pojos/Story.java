@@ -7,7 +7,7 @@ public class Story {
     private String title;
     private String teaser;
     private String storyDate;
-    private String textWithHtml;
+    private String text;
 
     public Story() {}
 
@@ -59,12 +59,12 @@ public class Story {
         this.storyDate = storyDate;
     }
 
-    public String getTextWithHtml() {
-        return textWithHtml;
+    public String getText() {
+        return text;
     }
 
-    public void setTextWithHtml(String textWithHtml) {
-        this.textWithHtml = textWithHtml;
+    public void setText(String text) {
+        this.text = text;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class Story {
                 ", title='" + title + '\'' +
                 ", teaser='" + teaser + '\'' +
                 ", storyDate='" + storyDate + '\'' +
-                ", textWithHtml=" + textWithHtml +
+                ", text=" + text +
                 '}';
     }
 }

@@ -16,4 +16,6 @@
     <string name="world">World</string>
     <string name="politics">Politics</string>
     <string name="favorites">Favorites</string>
+    <string name="story_link_text">More on this at npr.org</string>
+    <string name="share">Share</string>
 </resources>

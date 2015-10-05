@@ -1,8 +1,8 @@
 package com.akhadidja.android.flashnews;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 
 import com.akhadidja.android.flashnews.callbacks.StoriesLoadedListener;
 import com.akhadidja.android.flashnews.data.FlashNewsSource;
@@ -22,10 +21,9 @@ import com.akhadidja.android.flashnews.pojos.Story;
 // TODO link back to https://icons8.com & https://www.iconfinder.com in About
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, RecyclerView.OnItemTouchListener, StoriesLoadedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, StoriesLoadedListener {
 
     private String mApiKey;
-    private GestureDetectorCompat mDetectorCompat;
     private StoryAdapter mStoryAdapter;
     private FlashNewsSource dataSource;
 
@@ -43,7 +41,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initLayoutFeatures() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -59,10 +57,20 @@ public class MainActivity extends AppCompatActivity
     private void initRecycler() {
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.stories_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addOnItemTouchListener(this);
+        mRecyclerView.addOnItemTouchListener(new RecyclerStoryItemTouchListener(this,
+                new RecyclerStoryItemTouchListener.OnStoryItemClickListener(){
+                    @Override
+                    public void onStoryItemClicked(int position) {
+                        Intent intent = new Intent(MainActivity.this, FullStoryActivity.class);
+                        intent.putExtra(Intent.EXTRA_TEXT,
+                                mStoryAdapter.getStoryApiIDAtPosition(position));
+                        startActivity(intent);
+                    }
+                }));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL_LIST));
         mStoryAdapter = new StoryAdapter();
         mRecyclerView.setAdapter(mStoryAdapter);
-        mDetectorCompat = new GestureDetectorCompat(this, new StoryListener(this, mRecyclerView));
         mApiKey = getString(R.string.NPR_API_KEY);
     }
 
@@ -159,22 +167,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-        mDetectorCompat.onTouchEvent(e);
-        return false;
-    }
-
-    @Override
-    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-    }
-
-    @Override
-    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
     }
 
     @Override

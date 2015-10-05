@@ -19,7 +19,7 @@ public class NprApiEndpoints {
     public static final String FIELD_TITLE = "title";
     public static final String FIELD_TEASER = "teaser";
     public static final String FIELD_STORY_DATE = "storyDate";
-    public static final String TEXT_WITH_HTML = "textWithHtml";
+    public static final String FIELD_TEXT = "text";
     public static final String FIELD_IMAGE = "image";
     public static final String FIELD_CORRECTION = "correction";
 

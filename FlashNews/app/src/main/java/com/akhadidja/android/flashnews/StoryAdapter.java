@@ -93,6 +93,10 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryHolder>
         return mStories.length;
     }
 
+    public String getStoryApiIDAtPosition(int position){
+        return mStories[position].getId();
+    }
+
     public class StoryHolder extends RecyclerView.ViewHolder{
         TextView title;
         TextView date;

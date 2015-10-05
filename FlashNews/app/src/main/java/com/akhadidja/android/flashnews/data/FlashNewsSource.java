@@ -22,7 +22,7 @@ public class FlashNewsSource {
             FlashNewsContract.StoryEntry.COLUMN_TITLE,
             FlashNewsContract.StoryEntry.COLUMN_TEASER,
             FlashNewsContract.StoryEntry.COLUMN_DATE,
-            FlashNewsContract.StoryEntry.COLUMN_TEXT_WITH_HTML,
+            FlashNewsContract.StoryEntry.COLUMN_TEXT,
             FlashNewsContract.StoryEntry.COLUMN_STORY_TOPIC
     };
 
@@ -60,7 +60,7 @@ public class FlashNewsSource {
         values.put(FlashNewsContract.StoryEntry.COLUMN_TITLE, story.getTitle());
         values.put(FlashNewsContract.StoryEntry.COLUMN_TEASER, story.getTeaser());
         values.put(FlashNewsContract.StoryEntry.COLUMN_DATE, story.getStoryDate());
-        values.put(FlashNewsContract.StoryEntry.COLUMN_TEXT_WITH_HTML, story.getTextWithHtml());
+        values.put(FlashNewsContract.StoryEntry.COLUMN_TEXT, story.getText());
         values.put(FlashNewsContract.StoryEntry.COLUMN_STORY_TOPIC, topic);
 
         return db.insertOrThrow(FlashNewsContract.StoryEntry.TABLE_NAME, null, values);
@@ -134,8 +134,8 @@ public class FlashNewsSource {
         story.setTitle(c.getString(c.getColumnIndex(FlashNewsContract.StoryEntry.COLUMN_TITLE)));
         story.setTeaser(c.getString(c.getColumnIndex(FlashNewsContract.StoryEntry.COLUMN_TEASER)));
         story.setStoryDate(c.getString(c.getColumnIndex(FlashNewsContract.StoryEntry.COLUMN_DATE)));
-        story.setTextWithHtml(c.getString(
-                c.getColumnIndex(FlashNewsContract.StoryEntry.COLUMN_TEXT_WITH_HTML)));
+        story.setText(c.getString(
+                c.getColumnIndex(FlashNewsContract.StoryEntry.COLUMN_TEXT)));
 
         return story;
     }
