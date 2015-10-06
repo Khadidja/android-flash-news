@@ -17,7 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FetchNprNewsTask extends AsyncTask<String, Void, Story[]>{
+public class FetchNprNewsTask extends AsyncTask<Void, Void, Story[]>{
 
     private static final String LOG_TAG = FetchNprNewsTask.class.getSimpleName();
 
@@ -35,9 +35,8 @@ public class FetchNprNewsTask extends AsyncTask<String, Void, Story[]>{
     }
 
     @Override
-    protected Story[] doInBackground(String... params) {
-        String topicId = params[0];
-        String topicJsonStr = Utility.getJsonStringFromUrl(mApiKey, topicId);
+    protected Story[] doInBackground(Void... params) {
+        String topicJsonStr = Utility.getJsonStringFromUrl(mApiKey, mTopic);
         try {
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.registerTypeAdapter(Story.class, new StoryDeserializer());

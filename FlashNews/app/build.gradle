@@ -34,3 +34,8 @@ dependencies {
     compile 'com.android.support:design:23.0.1'
     compile 'joda-time:joda-time:2.3'
 }
+
+dependencies {
+    compile 'com.parse.bolts:bolts-android:1.+'
+    compile fileTree(dir: 'libs', include: 'Parse-*.jar')
+}
