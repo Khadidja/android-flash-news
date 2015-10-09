@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/dummy_text"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/primaryText"
                 android:textSize="@dimen/title"
                 android:textStyle="bold" />
 
@@ -37,8 +37,11 @@
                 android:id="@+id/full_story_date_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/ic_clock"
+                android:drawableStart="@mipmap/ic_clock"
+                android:gravity="center"
                 android:text="@string/dummy_text"
-                android:textColor="@color/secondary_text"
+                android:textColor="@color/secondaryText"
                 android:textSize="@dimen/subheading" />
 
             <TextView
@@ -49,7 +52,7 @@
                 android:paddingTop="32dp"
                 android:singleLine="false"
                 android:text="@string/dummy_text"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/primaryText"
                 android:textSize="@dimen/body" />
 
             <TextView

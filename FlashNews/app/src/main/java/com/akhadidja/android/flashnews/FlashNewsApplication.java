@@ -1,16 +1,44 @@
 package com.akhadidja.android.flashnews;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 
 public class FlashNewsApplication extends Application {
 
+    private static FlashNewsApplication mInstance;
+    public final static int NOTIFICATION_ID = 100;
+    public final static String EXTRA_STORY = "extra_story";
+    public final static String EXTRA_TOPIC = "extra_topic";
+
+    public static synchronized FlashNewsApplication getInstance() {
+        return mInstance;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        mInstance = this;
+
         Parse.initialize(this, getString(R.string.Application_ID), getString(R.string.Client_Key));
         ParseInstallation.getCurrentInstallation().saveInBackground();
+    }
+
+    public static void saveToPreferences(Context context, String key, boolean value) {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+
+    public static boolean readFromPreferences(Context context, String key, boolean defaultValue) {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        return sharedPreferences.getBoolean(key, defaultValue);
     }
 }

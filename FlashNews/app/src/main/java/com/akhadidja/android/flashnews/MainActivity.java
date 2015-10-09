@@ -9,8 +9,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.akhadidja.android.flashnews.json.NprApiEndpoints;
 
@@ -19,25 +21,64 @@ import com.akhadidja.android.flashnews.json.NprApiEndpoints;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String STORIES_FRAGMENT_KEY = "stories_fragment";
+    private static final String NEWS_CATEGORY_KEY = "news_category";
+    private static final String ACTIVITY_TITLE = "activity_title";
+
+    private StoriesFragment mStoriesFragment = null;
+    private FragmentManager mFragmentManager;
+    private DrawerLayout drawer;
+    private NavigationView mNavigationView;
+    private int mDrawerCheckedItemId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initLayoutFeatures();
+
+        mFragmentManager = getFragmentManager();
+        if(savedInstanceState != null){
+            Log.d(LOG_TAG, "savedInstanceState NOT null");
+            mStoriesFragment = (StoriesFragment)
+                    mFragmentManager.getFragment(savedInstanceState, STORIES_FRAGMENT_KEY);
+            mDrawerCheckedItemId = savedInstanceState.getInt(NEWS_CATEGORY_KEY);
+            mNavigationView.setCheckedItem(mDrawerCheckedItemId);
+            setTitle(savedInstanceState.getString(ACTIVITY_TITLE));
+            Log.d(LOG_TAG, "Loading stories fragment...");
+            FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.stories_fragment_container, mStoriesFragment);
+            fragmentTransaction.commit();
+            Log.d(LOG_TAG, "...loaded stories fragment");
+
+        } else {
+            Log.d(LOG_TAG, "NO Saved state");
+            drawer.openDrawer(GravityCompat.START);
+        }
     }
 
     private void initLayoutFeatures() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(mStoriesFragment != null)
+            mFragmentManager.putFragment(outState, STORIES_FRAGMENT_KEY, mStoriesFragment);
+        outState.putInt(NEWS_CATEGORY_KEY, mDrawerCheckedItemId);
+        outState.putString(ACTIVITY_TITLE, String.valueOf(getTitle()));
     }
 
     @Override
@@ -69,11 +110,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        StoriesFragment mStoriesFragment = null;
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        mDrawerCheckedItemId = item.getItemId();
 
-        switch (item.getItemId()) {
+        switch (mDrawerCheckedItemId) {
             case R.id.nav_news:{
                 setTitle(R.string.news);
                 mStoriesFragment = StoriesFragment.newInstance(NprApiEndpoints.TOPIC_NEWS);
@@ -102,6 +142,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_politics:{
                 setTitle(R.string.politics);
                 mStoriesFragment = StoriesFragment.newInstance(NprApiEndpoints.TOPIC_POLITICS);
+                break;
+            }
+            case R.id.nav_favorites:{
+                Toast.makeText(this, "TODO: Favs db table", Toast.LENGTH_SHORT).show();
                 break;
             }
             default:
