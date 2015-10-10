@@ -9,66 +9,8 @@
         android:id="@+id/full_story_toolbar"
         layout="@layout/app_bar" />
 
-    <ScrollView
+    <FrameLayout
+        android:id="@+id/full_story_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            tools:context="com.akhadidja.android.flashnews.FullStoryActivity">
-
-
-            <TextView
-                android:id="@+id/full_story_title_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dummy_text"
-                android:textColor="@color/primaryText"
-                android:textSize="@dimen/title"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/full_story_date_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/ic_clock"
-                android:drawableStart="@mipmap/ic_clock"
-                android:gravity="center"
-                android:text="@string/dummy_text"
-                android:textColor="@color/secondaryText"
-                android:textSize="@dimen/subheading" />
-
-            <TextView
-                android:id="@+id/full_story_text_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="28dp"
-                android:paddingTop="32dp"
-                android:singleLine="false"
-                android:text="@string/dummy_text"
-                android:textColor="@color/primaryText"
-                android:textSize="@dimen/body" />
-
-            <TextView
-                android:id="@+id/full_story_website_link"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:clickable="true"
-                android:drawableLeft="@mipmap/ic_external_link"
-                android:drawablePadding="5dp"
-                android:drawableStart="@mipmap/ic_external_link"
-                android:gravity="center"
-                android:text="@string/story_link_text"
-                android:textColor="@color/accent"
-                android:textSize="@dimen/caption" />
-
-        </LinearLayout>
-    </ScrollView>
+        android:layout_height="wrap_content" />
 </LinearLayout>

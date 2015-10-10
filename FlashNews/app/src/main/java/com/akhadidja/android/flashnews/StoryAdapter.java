@@ -49,6 +49,10 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryHolder>
         return mStories.get(position);
     }
 
+    public ArrayList<Story> getStories() {
+        return mStories;
+    }
+
     public class StoryHolder extends RecyclerView.ViewHolder{
         TextView title;
         TextView date;

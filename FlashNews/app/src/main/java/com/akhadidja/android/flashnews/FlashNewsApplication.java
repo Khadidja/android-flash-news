@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.akhadidja.android.flashnews.json.NprApiEndpoints;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 
@@ -13,6 +14,7 @@ public class FlashNewsApplication extends Application {
     private static FlashNewsApplication mInstance;
     public final static int NOTIFICATION_ID = 100;
     public final static String EXTRA_STORY = "extra_story";
+    public final static String EXTRA_STORY_POSITION = "extra_story_pos";
     public final static String EXTRA_TOPIC = "extra_topic";
 
     public static synchronized FlashNewsApplication getInstance() {
@@ -40,5 +42,24 @@ public class FlashNewsApplication extends Application {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         return sharedPreferences.getBoolean(key, defaultValue);
+    }
+
+    public static String getTopicTitle(String topic){
+        switch (topic){
+            case NprApiEndpoints.TOPIC_NEWS:
+                return "News";
+            case NprApiEndpoints.TOPIC_SPORTS:
+                return "Sports";
+            case NprApiEndpoints.TOPIC_SCIENCE:
+                return "Science";
+            case NprApiEndpoints.TOPIC_POLITICS:
+                return "Politics";
+            case NprApiEndpoints.TOPIC_TECH:
+                return "Technology";
+            case NprApiEndpoints.TOPIC_WORLD:
+                return "World";
+            default:
+                return "Flash News";
+        }
     }
 }

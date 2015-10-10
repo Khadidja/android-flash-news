@@ -93,7 +93,9 @@ public class StoriesFragment extends Fragment implements
     public void onStoryItemClicked(int position) {
         Intent intent = new Intent(getActivity(), FullStoryActivity.class);
         intent.putExtra(FlashNewsApplication.EXTRA_STORY,
-                mStoryAdapter.getStory(position));
+                mStoryAdapter.getStories());
+        intent.putExtra(FlashNewsApplication.EXTRA_STORY_POSITION,
+                position);
         intent.putExtra(FlashNewsApplication.EXTRA_TOPIC, getTopicArg());
         startActivity(intent);
     }

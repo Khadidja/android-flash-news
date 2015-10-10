@@ -1,7 +1,8 @@
 package com.akhadidja.android.flashnews;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -9,23 +10,22 @@ import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import com.akhadidja.android.flashnews.pojos.Story;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import java.util.ArrayList;
 
 public class FullStoryActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = FullStoryActivity.class.getSimpleName();
+    private final static String FULL_STORY_FRAG = "full_story_frag";
     private ShareActionProvider mShareActionProvider;
     //private FlashNewsSource dataSource;
-    Story mStory;
+    ArrayList<Story> mStories;
+    int mPosition;
     String mTopic;
-    // TODO: replace isFav with appropriate database calls
+    private FullStoryFragment mFullStoryFragment = null;
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,19 +33,28 @@ public class FullStoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_full_story);
         Toolbar toolbar = (Toolbar) findViewById(R.id.full_story_toolbar);
         setSupportActionBar(toolbar);
+        mFragmentManager = getFragmentManager();
         //dataSource = new FlashNewsSource(this);
         //dataSource.open();
         if(savedInstanceState != null){
-            mStory = savedInstanceState.getParcelable(FlashNewsApplication.EXTRA_STORY);
+            mFullStoryFragment = (FullStoryFragment)
+                    mFragmentManager.getFragment(savedInstanceState, FULL_STORY_FRAG);
+            mStories = savedInstanceState.getParcelableArrayList(FlashNewsApplication.EXTRA_STORY);
+            mPosition = savedInstanceState.getInt(FlashNewsApplication.EXTRA_STORY_POSITION);
             mTopic = savedInstanceState.getString(FlashNewsApplication.EXTRA_TOPIC);
         } else {
             Intent intent = getIntent();
             if (intent != null) {
                 mTopic = intent.getStringExtra(FlashNewsApplication.EXTRA_TOPIC);
-                mStory = intent.getParcelableExtra(FlashNewsApplication.EXTRA_STORY);
+                mPosition = intent.getIntExtra(FlashNewsApplication.EXTRA_STORY_POSITION, 0);
+                mStories = intent.getParcelableArrayListExtra(FlashNewsApplication.EXTRA_STORY);
+                mFullStoryFragment = FullStoryFragment.newInstance(mStories, mPosition);
             }
         }
-        initFullStory();
+        setTitle(FlashNewsApplication.getTopicTitle(mTopic));
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.full_story_fragment_container, mFullStoryFragment);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -62,8 +71,9 @@ public class FullStoryActivity extends AppCompatActivity {
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         String text = "";
-        if(mStory != null)
-            text = mStory.getTitle() + " -> " + mStory.getShortLink();
+        if(mStories != null)
+            text = mStories.get(mPosition).getTitle() + " -> " +
+                    mStories.get(mPosition).getShortLink();
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         setShareIntent(shareIntent);
         return super.onPrepareOptionsMenu(menu);
@@ -86,43 +96,14 @@ public class FullStoryActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(FlashNewsApplication.EXTRA_STORY, mStory);
+        outState.putParcelableArrayList(FlashNewsApplication.EXTRA_STORY, mStories);
+        outState.putInt(FlashNewsApplication.EXTRA_STORY_POSITION, mPosition);
         outState.putString(FlashNewsApplication.EXTRA_TOPIC, mTopic);
     }
 
     private void setShareIntent(Intent shareIntent) {
         if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(shareIntent);
-        }
-    }
-
-    private void initFullStory() {
-        if (mStory != null) {
-            TextView title = (TextView) findViewById(R.id.full_story_title_textView);
-            TextView date = (TextView) findViewById(R.id.full_story_date_textView);
-            TextView text = (TextView) findViewById(R.id.full_story_text_textView);
-            TextView link = (TextView) findViewById(R.id.full_story_website_link);
-            link.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mStory.getHtmlLink()));
-                    startActivity(browserIntent);
-                }
-            });
-            title.setText(mStory.getTitle());
-            date.setText(formatDate());
-            text.setText(mStory.getText());
-        }
-    }
-
-    private String formatDate() {
-        try {
-            SimpleDateFormat dateFormat =
-                    new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
-            return dateFormat.parse(mStory.getStoryDate()).toString();
-
-        } catch (ParseException e) {
-            return mStory.getStoryDate();
         }
     }
 
