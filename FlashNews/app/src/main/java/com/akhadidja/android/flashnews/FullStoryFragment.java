@@ -1,10 +1,10 @@
 package com.akhadidja.android.flashnews;
 
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,35 +14,28 @@ import com.akhadidja.android.flashnews.pojos.Story;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class FullStoryFragment extends Fragment {
 
     private static final String LOG_TAG = FullStoryFragment.class.getSimpleName();
+    private Story mStory;
     //private FlashNewsSource dataSource;
-    ArrayList<Story> mStories;
-    int mPosition;
     TextView mTitle, mDate, mText, mLink;
 
     public FullStoryFragment() {
     }
 
-    public static FullStoryFragment newInstance(ArrayList<Story> stories, int position){
+    public static FullStoryFragment newInstance(Story story){
         FullStoryFragment fragment = new FullStoryFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(FlashNewsApplication.EXTRA_STORY, stories);
-        args.putInt(FlashNewsApplication.EXTRA_STORY_POSITION, position);
+        args.putParcelable(FlashNewsApplication.EXTRA_STORY, story);
         fragment.setArguments(args);
         return fragment;
     }
 
-    private ArrayList<Story> getArgStories(){
-        return getArguments().getParcelableArrayList(FlashNewsApplication.EXTRA_STORY);
-    }
-
-    private int getArgPosition(){
-        return getArguments().getInt(FlashNewsApplication.EXTRA_STORY_POSITION);
+    private Story getArgStory(){
+        return getArguments().getParcelable(FlashNewsApplication.EXTRA_STORY);
     }
 
     @Override
@@ -55,26 +48,25 @@ public class FullStoryFragment extends Fragment {
         mDate = (TextView) layout.findViewById(R.id.full_story_date_textView);
         mText = (TextView) layout.findViewById(R.id.full_story_text_textView);
         mLink = (TextView) layout.findViewById(R.id.full_story_website_link);
-        mPosition = getArgPosition();
-        mStories = getArgStories();
+        mStory = getArgStory();
 
         initFullStory();
         return layout;
     }
 
     private void initFullStory() {
-        if (mStories != null) {
+        if (mStory != null) {
             mLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent browserIntent = new Intent(
-                            Intent.ACTION_VIEW, Uri.parse(mStories.get(mPosition).getHtmlLink()));
+                            Intent.ACTION_VIEW, Uri.parse(mStory.getHtmlLink()));
                     startActivity(browserIntent);
                 }
             });
-            mTitle.setText(mStories.get(mPosition).getTitle());
+            mTitle.setText(mStory.getTitle());
             mDate.setText(formatDate());
-            mText.setText(mStories.get(mPosition).getText());
+            mText.setText(mStory.getText());
         }
     }
 
@@ -82,10 +74,10 @@ public class FullStoryFragment extends Fragment {
         try {
             SimpleDateFormat dateFormat =
                     new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
-            return dateFormat.parse(mStories.get(mPosition).getStoryDate()).toString();
+            return dateFormat.parse(mStory.getStoryDate()).toString();
 
         } catch (ParseException e) {
-            return mStories.get(mPosition).getStoryDate();
+            return mStory.getStoryDate();
         }
     }
 

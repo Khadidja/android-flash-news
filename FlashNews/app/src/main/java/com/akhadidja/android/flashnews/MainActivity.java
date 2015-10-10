@@ -1,9 +1,9 @@
 package com.akhadidja.android.flashnews;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         initLayoutFeatures();
 
-        mFragmentManager = getFragmentManager();
+        mFragmentManager = getSupportFragmentManager();
         if(savedInstanceState != null){
             Log.d(LOG_TAG, "savedInstanceState NOT null");
             mStoriesFragment = (StoriesFragment)

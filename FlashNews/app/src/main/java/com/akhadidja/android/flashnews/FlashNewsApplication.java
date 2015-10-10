@@ -13,6 +13,7 @@ public class FlashNewsApplication extends Application {
 
     private static FlashNewsApplication mInstance;
     public final static int NOTIFICATION_ID = 100;
+    public static final String EXTRA_STORIES = "extra_stories";
     public final static String EXTRA_STORY = "extra_story";
     public final static String EXTRA_STORY_POSITION = "extra_story_pos";
     public final static String EXTRA_TOPIC = "extra_topic";
