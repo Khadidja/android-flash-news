@@ -9,6 +9,8 @@ import android.util.Log;
 
 import com.akhadidja.android.flashnews.pojos.Story;
 
+import java.util.ArrayList;
+
 public class FlashNewsSource {
     private static final String LOG_TAG = FlashNewsSource.class.getSimpleName();
     private FlashNewsHelper helper;
@@ -26,6 +28,10 @@ public class FlashNewsSource {
             FlashNewsContract.StoryEntry.COLUMN_STORY_TOPIC
     };
 
+    private String [] favProjection = {
+            FlashNewsContract.FavoriteStoryEntry._ID,
+            FlashNewsContract.FavoriteStoryEntry.COLUMN_STORY_ID};
+
     public FlashNewsSource(Context context){
         helper = new FlashNewsHelper(context);
     }
@@ -38,8 +44,65 @@ public class FlashNewsSource {
         helper.close();
     }
 
+    public long addToFavorites(String storyId){
+        ContentValues values = new ContentValues();
+        values.put(FlashNewsContract.FavoriteStoryEntry.COLUMN_STORY_ID, storyId);
+        return db.insertOrThrow(FlashNewsContract.FavoriteStoryEntry.TABLE_NAME, null, values);
+    }
+
+    public long deleteFromFavorites(String storyId){
+        return db.delete(
+                FlashNewsContract.FavoriteStoryEntry.TABLE_NAME,
+                FlashNewsContract.FavoriteStoryEntry.COLUMN_STORY_ID + " LIKE ?",
+                new String[]{storyId});
+    }
+
+    public ArrayList<Story> getFavoriteStories(){
+        ArrayList<Story> stories = new ArrayList<>();
+        Cursor favCursor = db.query(FlashNewsContract.FavoriteStoryEntry.TABLE_NAME,
+                favProjection, null, null, null, null, null);
+
+        if(favCursor.moveToFirst()){
+            String id = favCursor.getString(
+                    favCursor.getColumnIndex(FlashNewsContract.FavoriteStoryEntry.COLUMN_STORY_ID));
+            Story story = getStoryByApiId(id);
+            if(story != null)
+                stories.add(story);
+            favCursor.moveToNext();
+        }
+        favCursor.close();
+        Log.d(LOG_TAG, "Found " + stories.size() + " fav stories");
+        return stories;
+    }
+
+    public Story getStoryByApiId(String storyId){
+        Cursor storyCursor = db.query(
+                FlashNewsContract.StoryEntry.TABLE_NAME,
+                storyProjection,
+                FlashNewsContract.StoryEntry.COLUMN_STORY_ID + " LIKE ?",
+                new String[]{storyId}, null, null, null);
+        Story story = null;
+        if(storyCursor.moveToFirst()){
+            story = cursorToStory(storyCursor);
+        }
+        storyCursor.close();
+        return story;
+    }
+
+    public Story getFavoriteStory (String storyApiId){
+        Cursor cursor = db.query(
+                FlashNewsContract.FavoriteStoryEntry.TABLE_NAME,
+                favProjection,
+                FlashNewsContract.FavoriteStoryEntry.COLUMN_STORY_ID + " LIKE ?",
+                new String[]{storyApiId}, null, null, null);
+        Story story = null;
+        if(cursor.moveToFirst())
+            story = cursorToStory(cursor);
+        cursor.close();
+        return story;
+    }
+
     public long insertStories(Story [] stories, String topic){
-        Log.d(LOG_TAG, "Adding " + stories.length + " " + topic + " stories");
         long storiesCount = 0;
         for (Story story : stories) {
             long id = insertStory(story, topic);

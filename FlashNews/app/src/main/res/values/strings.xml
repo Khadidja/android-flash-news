@@ -78,4 +78,8 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="add_to_favs">Add to Favs</string>
+    <string name="cannot_add_to_fav">Sorry! Can\'t add to favs now :(</string>
+    <string name="story_saved">Story Saved!</string>
+    <string name="error_removing_fav">Hmm something happened while removing story.</string>
+    <string name="story_removed_from_favs">Story removed from your favs!</string>
 </resources>

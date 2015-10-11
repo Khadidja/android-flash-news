@@ -17,4 +17,9 @@ public final class FlashNewsContract {
         public static final String COLUMN_TEXT = "plain_text";
         public static final String COLUMN_STORY_TOPIC = "story_topic";
     }
+
+    public static abstract class FavoriteStoryEntry implements BaseColumns{
+        public static final String TABLE_NAME = "favorites";
+        public static final String COLUMN_STORY_ID = "story_id";
+    }
 }
