@@ -2,6 +2,7 @@ package com.akhadidja.android.flashnews;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -12,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.akhadidja.android.flashnews.json.NprApiEndpoints;
 
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity
     private static final String NEWS_CATEGORY_KEY = "news_category";
     private static final String ACTIVITY_TITLE = "activity_title";
 
-    private StoriesFragment mStoriesFragment = null;
+    private Fragment mFragment = null;
     private FragmentManager mFragmentManager;
     private DrawerLayout drawer;
     private NavigationView mNavigationView;
@@ -41,14 +41,13 @@ public class MainActivity extends AppCompatActivity
         mFragmentManager = getSupportFragmentManager();
         if(savedInstanceState != null){
             Log.d(LOG_TAG, "savedInstanceState NOT null");
-            mStoriesFragment = (StoriesFragment)
-                    mFragmentManager.getFragment(savedInstanceState, STORIES_FRAGMENT_KEY);
+            mFragment = mFragmentManager.getFragment(savedInstanceState, STORIES_FRAGMENT_KEY);
             mDrawerCheckedItemId = savedInstanceState.getInt(NEWS_CATEGORY_KEY);
             mNavigationView.setCheckedItem(mDrawerCheckedItemId);
             setTitle(savedInstanceState.getString(ACTIVITY_TITLE));
             Log.d(LOG_TAG, "Loading stories fragment...");
             FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.stories_fragment_container, mStoriesFragment);
+            fragmentTransaction.replace(R.id.stories_fragment_container, mFragment);
             fragmentTransaction.commit();
             Log.d(LOG_TAG, "...loaded stories fragment");
 
@@ -75,8 +74,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mStoriesFragment != null)
-            mFragmentManager.putFragment(outState, STORIES_FRAGMENT_KEY, mStoriesFragment);
+        if(mFragment != null)
+            mFragmentManager.putFragment(outState, STORIES_FRAGMENT_KEY, mFragment);
         outState.putInt(NEWS_CATEGORY_KEY, mDrawerCheckedItemId);
         outState.putString(ACTIVITY_TITLE, String.valueOf(getTitle()));
     }
@@ -116,43 +115,44 @@ public class MainActivity extends AppCompatActivity
         switch (mDrawerCheckedItemId) {
             case R.id.nav_news:{
                 setTitle(R.string.news);
-                mStoriesFragment = StoriesFragment.newInstance(NprApiEndpoints.TOPIC_NEWS);
+                mFragment = StoriesFragment.newInstance(NprApiEndpoints.TOPIC_NEWS);
                 break;
             }
             case R.id.nav_sports:{
                 setTitle(R.string.sports);
-                mStoriesFragment = StoriesFragment.newInstance(NprApiEndpoints.TOPIC_SPORTS);
+                mFragment = StoriesFragment.newInstance(NprApiEndpoints.TOPIC_SPORTS);
                 break;
             }
             case R.id.nav_science:{
                 setTitle(R.string.science);
-                mStoriesFragment = StoriesFragment.newInstance(NprApiEndpoints.TOPIC_SCIENCE);
+                mFragment = StoriesFragment.newInstance(NprApiEndpoints.TOPIC_SCIENCE);
                 break;
             }
             case R.id.nav_tech:{
                 setTitle(R.string.technology);
-                mStoriesFragment = StoriesFragment.newInstance(NprApiEndpoints.TOPIC_TECH);
+                mFragment = StoriesFragment.newInstance(NprApiEndpoints.TOPIC_TECH);
                 break;
             }
             case R.id.nav_world:{
                 setTitle(R.string.world);
-                mStoriesFragment = StoriesFragment.newInstance(NprApiEndpoints.TOPIC_WORLD);
+                mFragment = StoriesFragment.newInstance(NprApiEndpoints.TOPIC_WORLD);
                 break;
             }
             case R.id.nav_politics:{
                 setTitle(R.string.politics);
-                mStoriesFragment = StoriesFragment.newInstance(NprApiEndpoints.TOPIC_POLITICS);
+                mFragment = StoriesFragment.newInstance(NprApiEndpoints.TOPIC_POLITICS);
                 break;
             }
             case R.id.nav_favorites:{
-                Toast.makeText(this, "TODO: Favs db table", Toast.LENGTH_SHORT).show();
+                setTitle(R.string.favorties);
+                mFragment = FavoriteStoriesFragment.newInstance();
                 break;
             }
             default:
                 setTitle(R.string.app_name);
                 break;
         }
-        fragmentTransaction.replace(R.id.stories_fragment_container, mStoriesFragment);
+        fragmentTransaction.replace(R.id.stories_fragment_container, mFragment);
         fragmentTransaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

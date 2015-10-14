@@ -17,6 +17,7 @@ public class FlashNewsApplication extends Application {
     public final static String EXTRA_STORY = "extra_story";
     public final static String EXTRA_STORY_POSITION = "extra_story_pos";
     public final static String EXTRA_TOPIC = "extra_topic";
+    public static final String EXTRA_IS_FAV = "is_fav";
 
     public static synchronized FlashNewsApplication getInstance() {
         return mInstance;

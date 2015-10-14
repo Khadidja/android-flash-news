@@ -45,12 +45,14 @@ public class FlashNewsSource {
     }
 
     public long addToFavorites(String storyId){
+        Log.d(LOG_TAG, "Adding "+storyId+" to favs");
         ContentValues values = new ContentValues();
         values.put(FlashNewsContract.FavoriteStoryEntry.COLUMN_STORY_ID, storyId);
         return db.insertOrThrow(FlashNewsContract.FavoriteStoryEntry.TABLE_NAME, null, values);
     }
 
     public long deleteFromFavorites(String storyId){
+        Log.d(LOG_TAG, "Deleting " + storyId + " from favs");
         return db.delete(
                 FlashNewsContract.FavoriteStoryEntry.TABLE_NAME,
                 FlashNewsContract.FavoriteStoryEntry.COLUMN_STORY_ID + " LIKE ?",
@@ -63,9 +65,11 @@ public class FlashNewsSource {
                 favProjection, null, null, null, null, null);
 
         if(favCursor.moveToFirst()){
+            Log.d(LOG_TAG, "There are "+favCursor.getCount()+" favs in table");
             String id = favCursor.getString(
                     favCursor.getColumnIndex(FlashNewsContract.FavoriteStoryEntry.COLUMN_STORY_ID));
-            Story story = getStoryByApiId(id);
+            Log.d(LOG_TAG, "id from cursor: "+id);
+            Story story = selectStory(id);
             if(story != null)
                 stories.add(story);
             favCursor.moveToNext();
@@ -73,20 +77,6 @@ public class FlashNewsSource {
         favCursor.close();
         Log.d(LOG_TAG, "Found " + stories.size() + " fav stories");
         return stories;
-    }
-
-    public Story getStoryByApiId(String storyId){
-        Cursor storyCursor = db.query(
-                FlashNewsContract.StoryEntry.TABLE_NAME,
-                storyProjection,
-                FlashNewsContract.StoryEntry.COLUMN_STORY_ID + " LIKE ?",
-                new String[]{storyId}, null, null, null);
-        Story story = null;
-        if(storyCursor.moveToFirst()){
-            story = cursorToStory(storyCursor);
-        }
-        storyCursor.close();
-        return story;
     }
 
     public Story getFavoriteStory (String storyApiId){
@@ -97,7 +87,8 @@ public class FlashNewsSource {
                 new String[]{storyApiId}, null, null, null);
         Story story = null;
         if(cursor.moveToFirst())
-            story = cursorToStory(cursor);
+            story = selectStory(cursor.getString(
+                    cursor.getColumnIndex(FlashNewsContract.FavoriteStoryEntry.COLUMN_STORY_ID)));
         cursor.close();
         return story;
     }
@@ -153,8 +144,9 @@ public class FlashNewsSource {
                 FlashNewsContract.StoryEntry.COLUMN_STORY_ID + " LIKE ?",
                 new String[]{storyApiID}, null, null, null);
 
-        if(c.moveToFirst())
+        if(c.moveToFirst()){
             story = cursorToStory(c);
+        }
 
         c.close();
         return story;

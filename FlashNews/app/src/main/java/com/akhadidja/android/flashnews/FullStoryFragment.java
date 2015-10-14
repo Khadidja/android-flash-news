@@ -20,16 +20,16 @@ public class FullStoryFragment extends Fragment {
 
     private static final String LOG_TAG = FullStoryFragment.class.getSimpleName();
     private Story mStory;
-    //private FlashNewsSource dataSource;
     TextView mTitle, mDate, mText, mLink;
 
     public FullStoryFragment() {
     }
 
-    public static FullStoryFragment newInstance(Story story){
+    public static FullStoryFragment newInstance(Story story, int position){
         FullStoryFragment fragment = new FullStoryFragment();
         Bundle args = new Bundle();
         args.putParcelable(FlashNewsApplication.EXTRA_STORY, story);
+        args.putInt(FlashNewsApplication.EXTRA_STORY_POSITION, position);
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,8 +42,6 @@ public class FullStoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_full_story, container, false);
-        //dataSource = new FlashNewsSource(this);
-        //dataSource.open();
         mTitle = (TextView) layout.findViewById(R.id.full_story_title_textView);
         mDate = (TextView) layout.findViewById(R.id.full_story_date_textView);
         mText = (TextView) layout.findViewById(R.id.full_story_text_textView);
@@ -80,5 +78,4 @@ public class FullStoryFragment extends Fragment {
             return mStory.getStoryDate();
         }
     }
-
 }

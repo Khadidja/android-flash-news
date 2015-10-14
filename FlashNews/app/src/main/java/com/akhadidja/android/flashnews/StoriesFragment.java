@@ -67,15 +67,11 @@ public class StoriesFragment extends Fragment implements
         mRecyclerView.setAdapter(mStoryAdapter);
         mStories = new ArrayList<>();
         if(savedInstanceState != null){
-            Log.d(LOG_TAG, "savedInstanceState NOT null");
             mStories = savedInstanceState.getParcelableArrayList(STATE_STORIES);
-            if (mStories != null)
-                Log.d(LOG_TAG, "Saved stories NULL");
             mStoryAdapter.setStories(mStories);
         }else{
-            Log.d(LOG_TAG, "savedInstance NULL, get stories from Api");
-                new FetchNprNewsTask(getActivity(), getString(R.string.NPR_API_KEY),
-                        getTopicArg(), this).execute();
+            new FetchNprNewsTask(getActivity(), getString(R.string.NPR_API_KEY),
+                    getTopicArg(), this).execute();
         }
     }
 

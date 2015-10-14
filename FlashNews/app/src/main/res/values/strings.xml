@@ -82,4 +82,6 @@
     <string name="story_saved">Story Saved!</string>
     <string name="error_removing_fav">Hmm something happened while removing story.</string>
     <string name="story_removed_from_favs">Story removed from your favs!</string>
+    <string name="favorties">Favorites</string>
+    <string name="error_occured">An error occurred, please try again later.</string>
 </resources>
