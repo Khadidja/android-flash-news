@@ -1,5 +1,6 @@
 package com.akhadidja.android.flashnews;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.akhadidja.android.flashnews.data.FlashNewsSource;
 import com.akhadidja.android.flashnews.json.NprApiEndpoints;
 
 // TODO link back to https://icons8.com & https://www.iconfinder.com in About
@@ -32,11 +34,15 @@ public class MainActivity extends AppCompatActivity
     private NavigationView mNavigationView;
     private int mDrawerCheckedItemId;
 
+    private FlashNewsSource mDataSource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initLayoutFeatures();
+        mDataSource = new FlashNewsSource(this);
+        mDataSource.open();
 
         mFragmentManager = getSupportFragmentManager();
         if(savedInstanceState != null){
@@ -101,6 +107,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 
@@ -158,5 +165,17 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        mDataSource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        mDataSource.close();
+        super.onPause();
     }
 }

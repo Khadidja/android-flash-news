@@ -17,7 +17,10 @@ public class FlashNewsApplication extends Application {
     public final static String EXTRA_STORY = "extra_story";
     public final static String EXTRA_STORY_POSITION = "extra_story_pos";
     public final static String EXTRA_TOPIC = "extra_topic";
-    public static final String EXTRA_IS_FAV = "is_fav";
+    public static final String EXTRA_IS_FAV = "extra_is_fav";
+    public static final String EXTRA_FRAG_TYPE = "extra_fragment_type";
+    public static final String FAVORITES_FRAG = "favorites_frag";
+    public static final String STORIES_FRAG = "stories_frag";
 
     public static synchronized FlashNewsApplication getInstance() {
         return mInstance;
@@ -60,6 +63,8 @@ public class FlashNewsApplication extends Application {
                 return "Technology";
             case NprApiEndpoints.TOPIC_WORLD:
                 return "World";
+            case FavoriteStoriesFragment.FAVORITE_STORIES:
+                return FavoriteStoriesFragment.FAVORITE_STORIES;
             default:
                 return "Flash News";
         }

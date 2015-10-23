@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Story implements Parcelable {
+
     private String id;
     private String shortLink;
     private String htmlLink;

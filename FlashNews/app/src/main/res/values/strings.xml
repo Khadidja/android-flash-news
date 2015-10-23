@@ -84,4 +84,8 @@
     <string name="story_removed_from_favs">Story removed from your favs!</string>
     <string name="favorties">Favorites</string>
     <string name="error_occured">An error occurred, please try again later.</string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+    <string name="flash_news">flash news</string>
 </resources>

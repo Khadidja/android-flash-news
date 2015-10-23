@@ -6,12 +6,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
+import com.akhadidja.android.flashnews.adapters.StoryAdapter;
+import com.akhadidja.android.flashnews.callbacks.RecyclerStoryItemTouchListener;
 import com.akhadidja.android.flashnews.callbacks.StoriesLoadedListener;
+import com.akhadidja.android.flashnews.network.FetchNprNewsTask;
 import com.akhadidja.android.flashnews.pojos.Story;
 
 import java.util.ArrayList;
@@ -21,14 +24,13 @@ public class StoriesFragment extends Fragment implements
         RecyclerStoryItemTouchListener.OnStoryItemClickListener,
         StoriesLoadedListener, SwipeRefreshLayout.OnRefreshListener {
 
-    // TODO change methods to return ArrayList instead of arrays
-
     private static final String STATE_STORIES = "state_stories";
     private static final String TOPIC_KEY = "topic_key";
     private static final String LOG_TAG = StoriesFragment.class.getSimpleName();
     private ArrayList<Story> mStories;
     private StoryAdapter mStoryAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ProgressBar mProgressBar;
 
     public StoriesFragment() {
     }
@@ -49,11 +51,13 @@ public class StoriesFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_stories, container, false);
-        init(savedInstanceState, layout);
-
         swipeRefreshLayout = (SwipeRefreshLayout) layout.findViewById(R.id.stories_swipe_refresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.accent, R.color.primary, R.color.primaryLight);
         swipeRefreshLayout.setOnRefreshListener(this);
+        mProgressBar = (ProgressBar) layout.findViewById(R.id.stories_progressbar);
+
+        init(savedInstanceState, layout);
+
         return layout;
     }
 
@@ -70,16 +74,14 @@ public class StoriesFragment extends Fragment implements
             mStories = savedInstanceState.getParcelableArrayList(STATE_STORIES);
             mStoryAdapter.setStories(mStories);
         }else{
-            new FetchNprNewsTask(getActivity(), getString(R.string.NPR_API_KEY),
+            new FetchNprNewsTask(mProgressBar, getString(R.string.NPR_API_KEY),
                     getTopicArg(), this).execute();
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.d(LOG_TAG, "Saving state");
         super.onSaveInstanceState(outState);
-        Log.d(LOG_TAG, "Saving "+mStories.size()+" stories");
         outState.putParcelableArrayList(STATE_STORIES, mStories);
     }
 
@@ -92,6 +94,7 @@ public class StoriesFragment extends Fragment implements
         intent.putExtra(FlashNewsApplication.EXTRA_STORY_POSITION,
                 position);
         intent.putExtra(FlashNewsApplication.EXTRA_TOPIC, getTopicArg());
+        intent.putExtra(FlashNewsApplication.EXTRA_FRAG_TYPE, FlashNewsApplication.STORIES_FRAG);
         startActivity(intent);
     }
 
@@ -103,7 +106,7 @@ public class StoriesFragment extends Fragment implements
 
     @Override
     public void onRefresh() {
-        new FetchNprNewsTask(getActivity(), getString(R.string.NPR_API_KEY), getTopicArg(), this)
+        new FetchNprNewsTask(mProgressBar, getString(R.string.NPR_API_KEY), getTopicArg(), this)
                 .execute();
         swipeRefreshLayout.setRefreshing(false);
     }

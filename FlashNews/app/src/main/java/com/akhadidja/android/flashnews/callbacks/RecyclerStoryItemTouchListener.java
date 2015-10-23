@@ -1,4 +1,4 @@
-package com.akhadidja.android.flashnews;
+package com.akhadidja.android.flashnews.callbacks;
 
 import android.content.Context;
 import android.support.v4.view.GestureDetectorCompat;

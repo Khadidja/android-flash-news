@@ -1,8 +1,9 @@
-package com.akhadidja.android.flashnews;
+package com.akhadidja.android.flashnews.network;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.akhadidja.android.flashnews.callbacks.StoriesLoadedListener;
 import com.akhadidja.android.flashnews.json.NprApiEndpoints;
@@ -18,24 +19,31 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class FetchNprNewsTask extends AsyncTask<Void, Void, ArrayList<Story>>{
+public class FetchNprNewsTask extends AsyncTask<Void, Integer, ArrayList<Story>>{
 
     private static final String LOG_TAG = FetchNprNewsTask.class.getSimpleName();
 
     private String mApiKey;
     private String mTopic;
     private StoriesLoadedListener mListener;
+    private ProgressBar mProgressBar;
 
-    public FetchNprNewsTask(Context context, String apiKey, String topic,
+    public FetchNprNewsTask(ProgressBar progressBar, String apiKey, String topic,
                             StoriesLoadedListener listener){
         mApiKey = apiKey;
         mTopic = topic;
         mListener = listener;
+        mProgressBar = progressBar;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected ArrayList<Story> doInBackground(Void... params) {
-        Log.d(LOG_TAG, "Fetching stories in background");
         String topicJsonStr = Utility.getJsonStringFromUrl(mApiKey, mTopic);
         try {
             GsonBuilder gsonBuilder = new GsonBuilder();
@@ -46,10 +54,11 @@ public class FetchNprNewsTask extends AsyncTask<Void, Void, ArrayList<Story>>{
             JSONArray storyArray = listObject.getJSONArray(NprApiEndpoints.STORY);
 
             ArrayList<Story> stories = new ArrayList<>();
+
             for (int i = 0; i < storyArray.length(); i++) {
                 stories.add(gson.fromJson(storyArray.get(i).toString(), Story.class));
+                publishProgress(i, storyArray.length());
             }
-            Log.d(LOG_TAG, "Fetched "+stories.size()+" stories");
             return stories;
 
         } catch (JSONException e) {
@@ -59,10 +68,19 @@ public class FetchNprNewsTask extends AsyncTask<Void, Void, ArrayList<Story>>{
     }
 
     @Override
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
+        int counter = values[0];
+        int max = values[1];
+        mProgressBar.setMax(max);
+        mProgressBar.setProgress(counter);
+    }
+
+    @Override
     protected void onPostExecute(ArrayList<Story> stories) {
         if(stories != null){
-            Log.d(LOG_TAG, "onPostExecute Downloaded " + stories.size() + " for " + mTopic);
             mListener.onStoriesLoadedListener(stories);
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 }

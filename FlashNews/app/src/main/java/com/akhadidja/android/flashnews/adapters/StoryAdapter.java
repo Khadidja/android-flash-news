@@ -1,4 +1,4 @@
-package com.akhadidja.android.flashnews;
+package com.akhadidja.android.flashnews.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.akhadidja.android.flashnews.R;
 import com.akhadidja.android.flashnews.pojos.Story;
 
 import java.util.ArrayList;

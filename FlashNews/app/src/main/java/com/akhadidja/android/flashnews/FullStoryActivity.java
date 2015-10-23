@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.akhadidja.android.flashnews.adapters.FullStoryViewPagerAdapter;
 import com.akhadidja.android.flashnews.data.FlashNewsSource;
 import com.akhadidja.android.flashnews.pojos.Story;
 import com.viewpagerindicator.UnderlinePageIndicator;
@@ -28,8 +29,9 @@ public class FullStoryActivity extends AppCompatActivity {
     private String mTopic;
     private FlashNewsSource dataSource;
     private boolean isFav;
-    FullStoryViewPagerAdapter pagerAdapter;
+    private FullStoryViewPagerAdapter pagerAdapter;
     private Menu mOptionsMenu;
+    private String mFragmentType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class FullStoryActivity extends AppCompatActivity {
         dataSource.open();
 
         if(savedInstanceState != null){
+            mFragmentType = savedInstanceState.getString(FlashNewsApplication.EXTRA_FRAG_TYPE);
             mTopic = savedInstanceState.getString(FlashNewsApplication.EXTRA_TOPIC);
             mPosition = savedInstanceState.getInt(FlashNewsApplication.EXTRA_STORY_POSITION);
             mStories = savedInstanceState.getParcelableArrayList(FlashNewsApplication.EXTRA_STORIES);
@@ -48,7 +51,11 @@ public class FullStoryActivity extends AppCompatActivity {
         } else {
             initFromIntent();
         }
+        initViewPager();
+        setTitle(FlashNewsApplication.getTopicTitle(mTopic));
+    }
 
+    private void initViewPager() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.full_story_viewPager);
         pagerAdapter =
                 new FullStoryViewPagerAdapter(getSupportFragmentManager(), mStories);
@@ -68,7 +75,6 @@ public class FullStoryActivity extends AppCompatActivity {
                 }
             }
         });
-        setTitle(FlashNewsApplication.getTopicTitle(mTopic));
     }
 
     @Override
@@ -78,11 +84,13 @@ public class FullStoryActivity extends AppCompatActivity {
         outState.putInt(FlashNewsApplication.EXTRA_STORY_POSITION, mPosition);
         outState.putString(FlashNewsApplication.EXTRA_TOPIC, mTopic);
         outState.putBoolean(FlashNewsApplication.EXTRA_IS_FAV, isFav);
+        outState.putString(FlashNewsApplication.EXTRA_FRAG_TYPE, mFragmentType);
     }
 
     private void initFromIntent() {
         Intent intent = getIntent();
         if (intent != null) {
+            mFragmentType = intent.getStringExtra(FlashNewsApplication.EXTRA_FRAG_TYPE);
             mTopic = intent.getStringExtra(FlashNewsApplication.EXTRA_TOPIC);
             mPosition = intent.getIntExtra(FlashNewsApplication.EXTRA_STORY_POSITION, 0);
             mStories = intent.getParcelableArrayListExtra(FlashNewsApplication.EXTRA_STORY);
@@ -166,14 +174,27 @@ public class FullStoryActivity extends AppCompatActivity {
     }
 
     private void removeFromFavorites(MenuItem item){
-        long count = dataSource.deleteFromFavorites(mStories.get(mPosition).getId());
-        Log.d(LOG_TAG, "Removed " + count + " stories");
-        if(count == 1){
+        String id = mStories.get(mPosition).getId();
+        long countFav = dataSource.deleteFromFavorites(id);
+        long countStory = dataSource.deleteStory(id);
+        Log.d(LOG_TAG, "Removed " + countFav + " stories");
+        if(countFav == 1 && countStory == 1){
             item.setIcon(R.mipmap.ic_add_to_favs);
             Toast.makeText(this, R.string.story_removed_from_favs, Toast.LENGTH_LONG).show();
             isFav = false;
+            updateActivity();
         } else {
             Toast.makeText(this, R.string.error_removing_fav, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void updateActivity() {
+        if(mFragmentType.equals(FlashNewsApplication.FAVORITES_FRAG)){
+            Toast.makeText(this, "Removed from Favorites", Toast.LENGTH_SHORT).show();
+            mStories = dataSource.getFavoriteStories();
+            pagerAdapter.setStories(mStories);
+        } else if(mFragmentType.equals(FlashNewsApplication.STORIES_FRAG)){
+            Toast.makeText(this, "Removed from Stories", Toast.LENGTH_SHORT).show();
         }
     }
 
