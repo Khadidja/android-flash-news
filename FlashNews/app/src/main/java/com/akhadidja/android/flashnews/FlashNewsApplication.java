@@ -35,6 +35,10 @@ public class FlashNewsApplication extends Application {
         ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
+    public static Context getAppContext() {
+        return mInstance;
+    }
+
     public static void saveToPreferences(Context context, String key, boolean value) {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());

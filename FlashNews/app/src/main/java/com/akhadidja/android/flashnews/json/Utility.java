@@ -35,7 +35,6 @@ public class Utility {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         String jsonStr = null;
-        Log.d(LOG_TAG, "URL: " + urlStr);
         try {
             URL url = new URL(urlStr);
             urlConnection = (HttpURLConnection) url.openConnection();
