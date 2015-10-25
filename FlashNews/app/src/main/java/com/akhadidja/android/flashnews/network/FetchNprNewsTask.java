@@ -27,19 +27,22 @@ public class FetchNprNewsTask extends AsyncTask<Void, Integer, ArrayList<Story>>
     private String mTopic;
     private StoriesLoadedListener mListener;
     private ProgressBar mProgressBar;
+    private boolean mIsRefresh;
 
     public FetchNprNewsTask(ProgressBar progressBar, String apiKey, String topic,
-                            StoriesLoadedListener listener){
+                            StoriesLoadedListener listener, boolean isRefresh){
         mApiKey = apiKey;
         mTopic = topic;
         mListener = listener;
         mProgressBar = progressBar;
+        mIsRefresh = isRefresh;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mProgressBar.setVisibility(View.VISIBLE);
+        if(!mIsRefresh)
+            mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override

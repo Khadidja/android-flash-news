@@ -9,6 +9,10 @@ import com.akhadidja.android.flashnews.json.NprApiEndpoints;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 public class FlashNewsApplication extends Application {
 
     private static FlashNewsApplication mInstance;
@@ -51,6 +55,17 @@ public class FlashNewsApplication extends Application {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         return sharedPreferences.getBoolean(key, defaultValue);
+    }
+
+    public static String formatDate(String storyDate) {
+        try {
+            SimpleDateFormat dateFormat =
+                    new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.getDefault());
+            return dateFormat.parse(storyDate).toString();
+
+        } catch (ParseException e) {
+            return storyDate;
+        }
     }
 
     public static String getTopicTitle(String topic){

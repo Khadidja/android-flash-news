@@ -12,10 +12,6 @@ import android.widget.TextView;
 
 import com.akhadidja.android.flashnews.pojos.Story;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 public class FullStoryFragment extends Fragment {
 
     private static final String LOG_TAG = FullStoryFragment.class.getSimpleName();
@@ -63,19 +59,8 @@ public class FullStoryFragment extends Fragment {
                 }
             });
             mTitle.setText(mStory.getTitle());
-            mDate.setText(formatDate());
+            mDate.setText(FlashNewsApplication.formatDate(mStory.getStoryDate()));
             mText.setText(mStory.getText());
-        }
-    }
-
-    private String formatDate() {
-        try {
-            SimpleDateFormat dateFormat =
-                    new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
-            return dateFormat.parse(mStory.getStoryDate()).toString();
-
-        } catch (ParseException e) {
-            return mStory.getStoryDate();
         }
     }
 }

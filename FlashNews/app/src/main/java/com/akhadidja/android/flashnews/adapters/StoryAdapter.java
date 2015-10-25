@@ -1,12 +1,12 @@
 package com.akhadidja.android.flashnews.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.akhadidja.android.flashnews.FlashNewsApplication;
 import com.akhadidja.android.flashnews.R;
 import com.akhadidja.android.flashnews.pojos.Story;
 
@@ -24,7 +24,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryHolder>
     public void setStories(ArrayList<Story> stories) {
         mStories = stories;
         notifyDataSetChanged();
-        Log.d(LOG_TAG, "New set of stories");
     }
 
     @Override
@@ -37,7 +36,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryHolder>
     @Override
     public void onBindViewHolder(StoryHolder holder, int position) {
         holder.title.setText(mStories.get(position).getTitle());
-        holder.date.setText(mStories.get(position).getStoryDate());
+        holder.date.setText(FlashNewsApplication.formatDate(mStories.get(position).getStoryDate()));
         holder.teaser.setText(mStories.get(position).getTeaser());
     }
 

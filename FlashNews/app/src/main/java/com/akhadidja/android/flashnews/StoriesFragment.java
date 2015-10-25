@@ -75,7 +75,7 @@ public class StoriesFragment extends Fragment implements
             mStoryAdapter.setStories(mStories);
         }else{
             new FetchNprNewsTask(mProgressBar, getString(R.string.NPR_API_KEY),
-                    getTopicArg(), this).execute();
+                    getTopicArg(), this, false).execute();
         }
     }
 
@@ -106,8 +106,8 @@ public class StoriesFragment extends Fragment implements
 
     @Override
     public void onRefresh() {
-        new FetchNprNewsTask(mProgressBar, getString(R.string.NPR_API_KEY), getTopicArg(), this)
-                .execute();
+        new FetchNprNewsTask(mProgressBar, getString(R.string.NPR_API_KEY), getTopicArg(),
+                this, true).execute();
         swipeRefreshLayout.setRefreshing(false);
     }
 }
