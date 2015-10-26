@@ -8,7 +8,7 @@
         android:entryValues="@array/pref_text_size_values"
         android:icon="@mipmap/ic_text"
         android:key="@string/text_size_pref_key"
-        android:summary="@string/pref_text_size_default_value"
+        android:summary="@string/pref_text_size_default_entry"
         android:title="@string/text_size_dialog_title" />
 
     <PreferenceScreen

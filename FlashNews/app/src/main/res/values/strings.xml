@@ -31,7 +31,7 @@
     <string name="loading">Loading…</string>
     <string name="about">About</string>
     <string name="text_size_dialog_title">Story Text Size</string>
-    <string name="pref_text_size_default_value">14sp</string>
+    <string name="pref_text_size_default_value">14</string>
     <string name="dev_site">http://akhadidja.weebly.com</string>
     <string name="dev_title">Developer</string>
     <string name="iconfinder">Iconfinder</string>
@@ -44,14 +44,15 @@
     <string name="icons8">Icons8</string>
     <string name="about_screen_key">about_screen</string>
     <string name="text_size_pref_key">text_size_pref</string>
+    <string name="pref_text_size_default_entry">Medium</string>
     <string-array name="pref_text_size_entries">
         <item name="small">Small</item>
         <item name="medium">Medium</item>
         <item name="large">Large</item>
     </string-array>
     <string-array name="pref_text_size_values">
-        <item name="small">10sp</item>
-        <item name="medium">14sp</item>
-        <item name="large">24sp</item>
+        <item name="small">10</item>
+        <item name="medium">14</item>
+        <item name="large">24</item>
     </string-array>
 </resources>

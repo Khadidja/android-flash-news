@@ -111,6 +111,8 @@ public class MainActivity extends AppCompatActivity
             mFragment = SettingsFragment.newInstance();
             fragmentTransaction.replace(R.id.stories_fragment_container, mFragment);
             fragmentTransaction.commit();
+            mDrawerCheckedItemId = R.id.nav_settings;
+            mNavigationView.setCheckedItem(mDrawerCheckedItemId);
             return true;
         }
 

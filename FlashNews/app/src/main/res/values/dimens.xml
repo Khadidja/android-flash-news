@@ -7,7 +7,9 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="subheading">16sp</dimen>
     <dimen name="title">20sp</dimen>
-    <dimen name="body_regular">14sp</dimen>
+    <dimen name="body_regular_large">24sp</dimen>
+    <dimen name="body_regular_medium">14sp</dimen>
+    <dimen name="body_regular_small">10sp</dimen>
     <dimen name="caption_regular">12sp</dimen>
     <dimen name="regular_34">34sp</dimen>
 </resources>

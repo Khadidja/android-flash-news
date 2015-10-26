@@ -43,7 +43,7 @@
             android:singleLine="false"
             android:text="@string/dummy_text"
             android:textColor="@color/primaryText"
-            android:textSize="@dimen/body_regular" />
+            android:textSize="@dimen/body_regular_medium" />
 
         <TextView
             android:id="@+id/full_story_website_link"

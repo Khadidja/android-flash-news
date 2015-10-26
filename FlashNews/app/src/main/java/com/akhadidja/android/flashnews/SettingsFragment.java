@@ -8,6 +8,7 @@ import android.preference.PreferenceFragment;
 
 public class SettingsFragment extends PreferenceFragment {
 
+    public final static String PREF_TEXT_SIZE_VALUE = "pref_text_size";
     private ListPreference mListPreference;
 
     public SettingsFragment() {
@@ -25,24 +26,30 @@ public class SettingsFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_general);
 
+        String savedValue = FlashNewsApplication.readFromPreferences(getActivity(),
+                PREF_TEXT_SIZE_VALUE, getString(R.string.pref_text_size_default_value));
+
         mListPreference = (ListPreference) findPreference(getString(R.string.text_size_pref_key));
+        mListPreference.setValue(savedValue);
+        int index = mListPreference.findIndexOfValue(savedValue);
+        mListPreference.setSummary(getEntry(index));
         mListPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String value = newValue.toString();
                 int index = mListPreference.findIndexOfValue(value);
-                if (index >= 0) {
-                    preference.setSummary(((ListPreference) preference).getEntries()[index]);
-                } else {
-                    preference.setSummary(value);
-                }
+                String entry = getEntry(index);
+                preference.setSummary(entry);
+                FlashNewsApplication.saveToPreferences(getActivity(), PREF_TEXT_SIZE_VALUE, value);
                 return true;
             }
         });
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    private String getEntry(int index) {
+        if (index >= 0)
+            return (String) mListPreference.getEntries()[index];
+        else
+            return (String) mListPreference.getEntry();
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,10 @@ public class FullStoryFragment extends Fragment {
         mTitle = (TextView) layout.findViewById(R.id.full_story_title_textView);
         mDate = (TextView) layout.findViewById(R.id.full_story_date_textView);
         mText = (TextView) layout.findViewById(R.id.full_story_text_textView);
+        int textSize = Integer.parseInt(FlashNewsApplication.readFromPreferences(getActivity(),
+                SettingsFragment.PREF_TEXT_SIZE_VALUE,
+                getString(R.string.pref_text_size_default_value)));
+        mText.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
         mLink = (TextView) layout.findViewById(R.id.full_story_website_link);
         mStory = getArgStory();
 

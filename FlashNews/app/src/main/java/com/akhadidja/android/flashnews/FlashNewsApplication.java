@@ -68,6 +68,17 @@ public class FlashNewsApplication extends Application {
         }
     }
 
+    public static int getTextSize(String value){
+        switch (value) {
+            case "small":
+                return R.dimen.body_regular_small;
+            case "large":
+                return R.dimen.body_regular_large;
+            default:
+                return R.dimen.body_regular_medium;
+        }
+    }
+
     public static String getTopicTitle(String topic){
         switch (topic){
             case NprApiEndpoints.TOPIC_NEWS:
