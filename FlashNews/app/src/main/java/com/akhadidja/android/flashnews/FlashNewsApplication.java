@@ -43,18 +43,18 @@ public class FlashNewsApplication extends Application {
         return mInstance;
     }
 
-    public static void saveToPreferences(Context context, String key, boolean value) {
+    public static void saveToPreferences(Context context, String key, String value) {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(key, value);
+        editor.putString(key, value);
         editor.apply();
     }
 
-    public static boolean readFromPreferences(Context context, String key, boolean defaultValue) {
+    public static String readFromPreferences(Context context, String key, String defaultValue) {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        return sharedPreferences.getBoolean(key, defaultValue);
+        return sharedPreferences.getString(key, defaultValue);
     }
 
     public static String formatDate(String storyDate) {

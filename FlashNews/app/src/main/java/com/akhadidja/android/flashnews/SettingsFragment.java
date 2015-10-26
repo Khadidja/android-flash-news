@@ -25,7 +25,7 @@ public class SettingsFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_general);
 
-        mListPreference = (ListPreference) findPreference("text_size_pref");
+        mListPreference = (ListPreference) findPreference(getString(R.string.text_size_pref_key));
         mListPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {

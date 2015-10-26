@@ -31,7 +31,7 @@
     <string name="loading">Loading…</string>
     <string name="about">About</string>
     <string name="text_size_dialog_title">Story Text Size</string>
-    <string name="pref_text_size_default_value">Medium</string>
+    <string name="pref_text_size_default_value">14sp</string>
     <string name="dev_site">http://akhadidja.weebly.com</string>
     <string name="dev_title">Developer</string>
     <string name="iconfinder">Iconfinder</string>
@@ -42,6 +42,8 @@
     <string name="linkedIn_hyperlink">https://www.linkedin.com/in/akhadidja</string>
     <string name="icons8_hyperlink">https://icons8.com</string>
     <string name="icons8">Icons8</string>
+    <string name="about_screen_key">about_screen</string>
+    <string name="text_size_pref_key">text_size_pref</string>
     <string-array name="pref_text_size_entries">
         <item name="small">Small</item>
         <item name="medium">Medium</item>

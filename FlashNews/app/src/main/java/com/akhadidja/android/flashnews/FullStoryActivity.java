@@ -39,6 +39,9 @@ public class FullStoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_full_story);
         Toolbar toolbar = (Toolbar) findViewById(R.id.full_story_toolbar);
         setSupportActionBar(toolbar);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         dataSource = new FlashNewsSource(this);
         dataSource.open();
 
@@ -147,6 +150,10 @@ public class FullStoryActivity extends AppCompatActivity {
                 } else {
                     addToFavorites(item);
                 }
+                return true;
+            }
+            case android.R.id.home:{
+                finish();
                 return true;
             }
         }
