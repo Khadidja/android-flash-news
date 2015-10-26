@@ -1,8 +1,8 @@
 package com.akhadidja.android.flashnews;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.akhadidja.android.flashnews.adapters.StoryAdapter;
 import com.akhadidja.android.flashnews.callbacks.RecyclerStoryItemTouchListener;
@@ -31,6 +32,7 @@ public class StoriesFragment extends Fragment implements
     private StoryAdapter mStoryAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar mProgressBar;
+    private TextView mLoadingTextView;
 
     public StoriesFragment() {
     }
@@ -55,6 +57,7 @@ public class StoriesFragment extends Fragment implements
         swipeRefreshLayout.setColorSchemeResources(R.color.accent, R.color.primary, R.color.primaryLight);
         swipeRefreshLayout.setOnRefreshListener(this);
         mProgressBar = (ProgressBar) layout.findViewById(R.id.stories_progressbar);
+        mLoadingTextView = (TextView) layout.findViewById(R.id.loading_textView);
 
         init(savedInstanceState, layout);
 
@@ -74,7 +77,7 @@ public class StoriesFragment extends Fragment implements
             mStories = savedInstanceState.getParcelableArrayList(STATE_STORIES);
             mStoryAdapter.setStories(mStories);
         }else{
-            new FetchNprNewsTask(mProgressBar, getString(R.string.NPR_API_KEY),
+            new FetchNprNewsTask(mProgressBar, mLoadingTextView,getString(R.string.NPR_API_KEY),
                     getTopicArg(), this, false).execute();
         }
     }
@@ -106,8 +109,8 @@ public class StoriesFragment extends Fragment implements
 
     @Override
     public void onRefresh() {
-        new FetchNprNewsTask(mProgressBar, getString(R.string.NPR_API_KEY), getTopicArg(),
-                this, true).execute();
+        new FetchNprNewsTask(mProgressBar, mLoadingTextView, getString(R.string.NPR_API_KEY),
+                getTopicArg(), this, true).execute();
         swipeRefreshLayout.setRefreshing(false);
     }
 }

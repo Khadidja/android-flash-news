@@ -165,7 +165,7 @@ public class FullStoryActivity extends AppCompatActivity {
                 isFav = true;
             }
         } else {
-            Toast.makeText(this, R.string.error_occured, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.error_occurred, Toast.LENGTH_LONG).show();
         }
     }
 

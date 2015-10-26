@@ -11,13 +11,23 @@
         android:layout_height="match_parent"
         tools:context="com.akhadidja.android.flashnews.StoriesFragment">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/loading"
+            android:id="@+id/loading_textView"
+            android:layout_above="@+id/stories_progressbar"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/caption_regular"
+            android:textColor="@color/primaryText" />
+
         <ProgressBar
             android:id="@+id/stories_progressbar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:minHeight="10dp"
+            android:minHeight="5dp"
             android:progressDrawable="@drawable/accent_progress"/>
 
         <android.support.v7.widget.RecyclerView

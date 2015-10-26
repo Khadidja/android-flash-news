@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="@string/pref_text_size_default_value"
+        android:dialogTitle="@string/text_size_dialog_title"
+        android:entries="@array/pref_text_size_entries"
+        android:entryValues="@array/pref_text_size_values"
+        android:icon="@mipmap/ic_text"
+        android:key="text_size_pref"
+        android:summary="@string/pref_text_size_default_value"
+        android:title="@string/text_size_dialog_title" />
+
+    <Preference
+        android:icon="@mipmap/ic_person"
+        android:summary="@string/dev_site"
+        android:title="@string/dev_title">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="@string/dev_site" />
+    </Preference>
+    <Preference
+        android:icon="@mipmap/ic_github"
+        android:summary="@string/git_hyperlink"
+        android:title="@string/github">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="@string/git_hyperlink" />
+    </Preference>
+    <Preference
+        android:icon="@mipmap/ic_linkedin"
+        android:summary="@string/linkedIn_hyperlink"
+        android:title="@string/linkedIn">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="@string/linkedIn_hyperlink" />
+    </Preference>
+    <Preference
+        android:icon="@mipmap/ic_iconfinder"
+        android:summary="@string/iconfinder_hyperlink"
+        android:title="@string/iconfinder">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="@string/iconfinder_hyperlink" />
+    </Preference>
+    <Preference
+        android:icon="@mipmap/ic_icons8"
+        android:summary="@string/icons8_hyperlink"
+        android:title="@string/icons8">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="@string/icons8_hyperlink" />
+    </Preference>
+</PreferenceScreen>

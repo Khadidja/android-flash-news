@@ -1,10 +1,10 @@
 package com.akhadidja.android.flashnews;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         mDataSource = new FlashNewsSource(this);
         mDataSource.open();
 
-        mFragmentManager = getSupportFragmentManager();
+        mFragmentManager = getFragmentManager();
         if(savedInstanceState != null){
             Log.d(LOG_TAG, "savedInstanceState NOT null");
             mFragment = mFragmentManager.getFragment(savedInstanceState, STORIES_FRAGMENT_KEY);
@@ -106,6 +106,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            setTitle(R.string.title_activity_settings);
+            FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+            mFragment = SettingsFragment.newInstance();
+            fragmentTransaction.replace(R.id.stories_fragment_container, mFragment);
+            fragmentTransaction.commit();
             return true;
         }
 
@@ -149,9 +154,13 @@ public class MainActivity extends AppCompatActivity
                 break;
             }
             case R.id.nav_favorites:{
-                setTitle(R.string.favorties);
+                setTitle(R.string.favorites);
                 mFragment = FavoriteStoriesFragment.newInstance();
                 break;
+            }
+            case R.id.nav_settings:{
+                setTitle(getString(R.string.action_settings));
+                mFragment = SettingsFragment.newInstance();
             }
             default:
                 setTitle(R.string.app_name);

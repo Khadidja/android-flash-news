@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.akhadidja.android.flashnews.callbacks.StoriesLoadedListener;
 import com.akhadidja.android.flashnews.json.NprApiEndpoints;
@@ -27,22 +28,26 @@ public class FetchNprNewsTask extends AsyncTask<Void, Integer, ArrayList<Story>>
     private String mTopic;
     private StoriesLoadedListener mListener;
     private ProgressBar mProgressBar;
+    private TextView mLoadingTextView;
     private boolean mIsRefresh;
 
-    public FetchNprNewsTask(ProgressBar progressBar, String apiKey, String topic,
-                            StoriesLoadedListener listener, boolean isRefresh){
+    public FetchNprNewsTask(ProgressBar progressBar, TextView loadingTextView, String apiKey,
+                            String topic, StoriesLoadedListener listener, boolean isRefresh){
         mApiKey = apiKey;
         mTopic = topic;
         mListener = listener;
         mProgressBar = progressBar;
+        mLoadingTextView = loadingTextView;
         mIsRefresh = isRefresh;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        if(!mIsRefresh)
+        if(!mIsRefresh){
             mProgressBar.setVisibility(View.VISIBLE);
+            mLoadingTextView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -84,6 +89,7 @@ public class FetchNprNewsTask extends AsyncTask<Void, Integer, ArrayList<Story>>
         if(stories != null){
             mListener.onStoriesLoadedListener(stories);
             mProgressBar.setVisibility(View.GONE);
+            mLoadingTextView.setVisibility(View.GONE);
         }
     }
 }
