@@ -15,7 +15,7 @@ public class Utility {
     private static final String NPR_BASE_URL = "http://api.npr.org/query?";
     private static final String LOG_TAG = Utility.class.getSimpleName();
 
-    private static String nprTopicUriBuilder(String apiKey, String topicId){
+    public static String nprTopicUriBuilder(String apiKey, String topicId){
         Uri uri = Uri.parse(NPR_BASE_URL).buildUpon()
                 .appendQueryParameter(NprApiEndpoints.TOPIC, topicId)
                 .appendQueryParameter(NprApiEndpoints.FIELDS,

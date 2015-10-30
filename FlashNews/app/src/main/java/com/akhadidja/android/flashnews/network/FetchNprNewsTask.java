@@ -1,16 +1,16 @@
 package com.akhadidja.android.flashnews.network;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.akhadidja.android.flashnews.callbacks.OnVolleyErrorListener;
 import com.akhadidja.android.flashnews.callbacks.StoriesLoadedListener;
 import com.akhadidja.android.flashnews.json.NprApiEndpoints;
 import com.akhadidja.android.flashnews.json.StoryDeserializer;
 import com.akhadidja.android.flashnews.json.Utility;
 import com.akhadidja.android.flashnews.pojos.Story;
+import com.android.volley.RequestQueue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -27,68 +27,59 @@ public class FetchNprNewsTask extends AsyncTask<Void, Integer, ArrayList<Story>>
     private String mApiKey;
     private String mTopic;
     private StoriesLoadedListener mListener;
-    private ProgressBar mProgressBar;
+    private OnVolleyErrorListener mVolleyErrorListener;
     private TextView mLoadingTextView;
     private boolean mIsRefresh;
+    private RequestQueue mRequestQueue;
 
-    public FetchNprNewsTask(ProgressBar progressBar, TextView loadingTextView, String apiKey,
-                            String topic, StoriesLoadedListener listener, boolean isRefresh){
+    public FetchNprNewsTask(TextView loadingTextView, String apiKey, String topic,
+                            StoriesLoadedListener storiesListener,
+                            OnVolleyErrorListener volleyListener, boolean isRefresh){
         mApiKey = apiKey;
         mTopic = topic;
-        mListener = listener;
-        mProgressBar = progressBar;
+        mListener = storiesListener;
+        mVolleyErrorListener = volleyListener;
         mLoadingTextView = loadingTextView;
         mIsRefresh = isRefresh;
+        VolleySingleton mVolleySingleton = VolleySingleton.getInstance();
+        mRequestQueue = mVolleySingleton.getRequestQueue();
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         if(!mIsRefresh){
-            mProgressBar.setVisibility(View.VISIBLE);
             mLoadingTextView.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     protected ArrayList<Story> doInBackground(Void... params) {
-        String topicJsonStr = Utility.getJsonStringFromUrl(mApiKey, mTopic);
-        try {
+        String url = Utility.nprTopicUriBuilder(mApiKey, mTopic);
+        ArrayList<Story> stories = new ArrayList<>();
+        try{
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.registerTypeAdapter(Story.class, new StoryDeserializer());
             Gson gson = gsonBuilder.create();
-            JSONObject jsonObject = new JSONObject(topicJsonStr);
+            JSONObject jsonObject =
+                    VolleyJSONRequest.response(mVolleyErrorListener, mRequestQueue, url);
             JSONObject listObject = jsonObject.getJSONObject(NprApiEndpoints.LIST);
             JSONArray storyArray = listObject.getJSONArray(NprApiEndpoints.STORY);
-
-            ArrayList<Story> stories = new ArrayList<>();
 
             for (int i = 0; i < storyArray.length(); i++) {
                 stories.add(gson.fromJson(storyArray.get(i).toString(), Story.class));
                 publishProgress(i, storyArray.length());
             }
-            return stories;
-
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "JSON pb", e);
+            //Log.d(LOG_TAG, "JSon response issue", e);
         }
-        return null;
-    }
-
-    @Override
-    protected void onProgressUpdate(Integer... values) {
-        super.onProgressUpdate(values);
-        int counter = values[0];
-        int max = values[1];
-        mProgressBar.setMax(max);
-        mProgressBar.setProgress(counter);
+        return stories;
     }
 
     @Override
     protected void onPostExecute(ArrayList<Story> stories) {
         if(stories != null){
             mListener.onStoriesLoadedListener(stories);
-            mProgressBar.setVisibility(View.GONE);
             mLoadingTextView.setVisibility(View.GONE);
         }
     }

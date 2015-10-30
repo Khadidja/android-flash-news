@@ -17,12 +17,10 @@ import android.view.MenuItem;
 import com.akhadidja.android.flashnews.data.FlashNewsSource;
 import com.akhadidja.android.flashnews.json.NprApiEndpoints;
 
-// TODO link back to https://icons8.com & https://www.iconfinder.com in About
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    //private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String STORIES_FRAGMENT_KEY = "stories_fragment";
     private static final String NEWS_CATEGORY_KEY = "news_category";
     private static final String ACTIVITY_TITLE = "activity_title";
@@ -45,19 +43,15 @@ public class MainActivity extends AppCompatActivity
 
         mFragmentManager = getFragmentManager();
         if(savedInstanceState != null){
-            Log.d(LOG_TAG, "savedInstanceState NOT null");
             mFragment = mFragmentManager.getFragment(savedInstanceState, STORIES_FRAGMENT_KEY);
             mDrawerCheckedItemId = savedInstanceState.getInt(NEWS_CATEGORY_KEY);
             mNavigationView.setCheckedItem(mDrawerCheckedItemId);
             setTitle(savedInstanceState.getString(ACTIVITY_TITLE));
-            Log.d(LOG_TAG, "Loading stories fragment...");
+
             FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.stories_fragment_container, mFragment);
             fragmentTransaction.commit();
-            Log.d(LOG_TAG, "...loaded stories fragment");
-
         } else {
-            Log.d(LOG_TAG, "NO Saved state");
             drawer.openDrawer(GravityCompat.START);
         }
     }

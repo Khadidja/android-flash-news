@@ -1,7 +1,6 @@
 package com.akhadidja.android.flashnews.network;
 
-import android.util.Log;
-
+import com.akhadidja.android.flashnews.callbacks.OnVolleyErrorListener;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -18,7 +17,7 @@ import java.util.concurrent.TimeoutException;
 public class VolleyJSONRequest {
 
     private static final int TIMEOUT = 10000;
-    private static final String LOG_TAG = VolleyJSONRequest.class.getSimpleName();
+    //private static final String LOG_TAG = VolleyJSONRequest.class.getSimpleName();
 
     public static JSONObject response (final OnVolleyErrorListener listener,
                                        RequestQueue requestQueue, String url){
@@ -39,11 +38,11 @@ public class VolleyJSONRequest {
             requestQueue.add(request);
             response = requestFuture.get(TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
-            Log.d(LOG_TAG, "Interruption", e);
+            //Log.d(LOG_TAG, "Interruption", e);
         } catch (ExecutionException e) {
-            Log.d(LOG_TAG, "Execution", e);
+            //Log.d(LOG_TAG, "Execution", e);
         } catch (TimeoutException e) {
-            Log.d(LOG_TAG, "Timed out", e);
+            //Log.d(LOG_TAG, "Timed out", e);
         }
         return response;
     }
